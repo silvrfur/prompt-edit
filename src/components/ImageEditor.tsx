@@ -99,5 +99,3 @@ const MyImageEditor = forwardRef<EditorHandle>((_, ref) => {
 MyImageEditor.displayName = "MyImageEditor";
 
 export default MyImageEditor;
-
-export default MyImageEditor;
