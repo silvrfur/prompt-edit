@@ -1,42 +1,230 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  --pe-bg: #050712;
+  --pe-panel: #0b0f1f;
+  --pe-panel-2: #0f162b;
+  --pe-border: rgba(255, 255, 255, 0.1);
+  --pe-text: #e6edf6;
+  --pe-muted: #8fa2b7;
+  --pe-cyan: #2de2e6;
+  --pe-teal: #13d7b5;
+  --pe-amber: #ffb347;
+  --pe-magenta: #ff4d9d;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes glowPulse {
+  0% {
+    opacity: 0.3;
+    transform: translateY(0px);
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 0.55;
+    transform: translateY(-6px);
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  100% {
+    opacity: 0.3;
+    transform: translateY(0px);
   }
 }
 
-.card {
-  padding: 2em;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(45, 226, 230, 0.35);
+  border-radius: 999px;
 }
 
-.read-the-docs {
-  color: #888;
+/* Toast UI editor styling */
+.tui-image-editor-container {
+  background: radial-gradient(circle at top, rgba(45, 226, 230, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(9, 12, 26, 0.92), rgba(8, 10, 20, 0.96));
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.55);
+}
+
+.tui-image-editor-header {
+  background: linear-gradient(90deg, rgba(10, 14, 28, 0.96), rgba(15, 22, 43, 0.96));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tui-image-editor-controls {
+  background: rgba(8, 10, 20, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tui-image-editor-menu {
+  background: rgba(11, 16, 32, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tui-image-editor-submenu {
+  background: rgba(11, 16, 32, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tui-image-editor-menu .tui-image-editor-item.active,
+.tui-image-editor-menu .tui-image-editor-item:hover {
+  color: var(--pe-cyan);
+}
+
+.tui-image-editor-menu .tui-image-editor-item {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Avoid overlapping Toast UI header buttons with the toolbar */
+.tui-image-editor-header,
+.tui-image-editor-header-buttons {
+  display: none !important;
+}
+.tui-image-editor-container .tui-image-editor-main {
+  top: 0 !important;
+}
+
+/* Toast UI submenu styling to match app */
+.tui-image-editor-submenu {
+  background: rgba(10, 14, 28, 0.95) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  padding: 14px 16px !important;
+  max-height: 520px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-submenu-item {
+  color: rgba(230, 237, 246, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-submenu-title {
+  color: rgba(143, 162, 183, 0.9);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-submenu-item ul,
+.tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-checkbox-group {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-checkbox {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: rgba(6, 10, 22, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.tui-image-editor-submenu .tui-image-editor-checkbox input[type="checkbox"] {
+  accent-color: #2de2e6;
+}
+
+.tui-image-editor-submenu .tui-image-editor-range-wrap,
+.tui-image-editor-submenu .tui-image-editor-range {
+  width: 100% !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-range-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-range {
+  accent-color: #2de2e6;
+  background: rgba(6, 10, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+.tui-image-editor-submenu .tui-image-editor-range input[type="range"] {
+  width: 100%;
+}
+
+.tui-image-editor-submenu .tui-image-editor-color-filter,
+.tui-image-editor-submenu .tui-image-editor-color-picker {
+  display: flex !important;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tui-image-editor-submenu .tui-image-editor-color-filter button,
+.tui-image-editor-submenu .tui-image-editor-color-picker button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.tui-image-editor-submenu .tui-image-editor-color-filter button:hover,
+.tui-image-editor-submenu .tui-image-editor-color-picker button:hover {
+  border-color: rgba(45, 226, 230, 0.65) !important;
+  box-shadow: 0 10px 18px rgba(45, 226, 230, 0.2);
+}
+
+.tui-image-editor-submenu .tui-image-editor-partition {
+  display: none !important;
+}
+
+.tui-image-editor-controls .tui-image-editor-button,
+.tui-image-editor-menu .tui-image-editor-button {
+  border-radius: 12px;
+}
+
+/* Override to match the classic Toast UI filter layout */
+.tui-image-editor-submenu {
+  padding: 10px 12px !important;
+  max-height: 240px;
+  overflow-y: auto;
+  display: block !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-submenu-item {
+  display: block !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-submenu-item ul,
+.tui-image-editor-submenu .tui-image-editor-submenu-item .tui-image-editor-checkbox-group {
+  display: block !important;
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-range-wrap {
+  display: block !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-checkbox {
+  display: inline-flex !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tui-image-editor-submenu .tui-image-editor-partition {
+  display: block !important;
 }
