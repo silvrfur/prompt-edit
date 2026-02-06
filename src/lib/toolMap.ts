@@ -1,0 +1,16 @@
+export const TOOL_TO_TUI: Record<string, string> = {
+  brightness: "brightness",
+  contrast: "contrast",
+  saturation: "saturation",
+  blur: "blur",
+  sharpen: "sharpen",
+  noise: "noise",
+  pixelate: "pixelate",
+  invert: "invert",
+  grayscale: "grayscale",
+  sepia: "sepia",
+  sepia2: "sepia2",
+  emboss: "emboss",
+  removeWhite: "removeWhite",
+  colorFilter: "colorFilter",
+};

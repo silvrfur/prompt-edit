@@ -1,12 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import ImageEditor from "tui-image-editor";
 
-export default function MyImageEditor() {
+const MyImageEditor = forwardRef((props, ref) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const myTheme: any = {
-  "common.bi.image": "",
-  "common.bi.name": "PromptEdit",
-};
+  const instanceRef = useRef<any>(null);
+
+  useImperativeHandle(ref, () => ({
+  applyFilter: (filterName: string, options: any) => {
+    console.log("applyFilter invoked:", filterName, options);
+    if (instanceRef.current) {
+      instanceRef.current.applyFilter(filterName, options)
+        .then(() => console.log("Filter applied successfully"))
+        .catch((err: any) => console.error("Filter failed:", err));
+    }
+  },
+}));
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -17,21 +25,19 @@ export default function MyImageEditor() {
           path: "https://picsum.photos/800/500",
           name: "SampleImage",
         },
-        menu: ["crop", "flip", "rotate", "draw", "shape", "text", "filter"],
+        menu: ["filter"],
         initMenu: "filter",
-        uiSize: {
-          width: "100%",
-          height: "700px",
-        },
+        uiSize: { width: "100%", height: "700px" },
         menuBarPosition: "bottom",
-        theme:myTheme,
       },
       cssMaxWidth: 800,
       cssMaxHeight: 700,
-      selectionStyle: {
-        cornerSize: 20,
-        rotatingPointOffset: 70,
-      },
+    });
+
+    instanceRef.current = editor;
+
+    editor.on("ready", () => {
+      console.log("Editor is ready, filters can be applied");
     });
 
     return () => {
@@ -39,5 +45,7 @@ export default function MyImageEditor() {
     };
   }, []);
 
-  return <div ref={editorRef} style={{ height: "100%", width: "100%" }}/>;
-}
+  return <div ref={editorRef} style={{ height: "100%", width: "100%" }} />;
+});
+
+export default MyImageEditor;

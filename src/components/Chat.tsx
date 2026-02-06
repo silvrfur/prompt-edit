@@ -2,11 +2,16 @@ import {
   useTamboThread,
   useTamboThreadInput
 } from "@tambo-ai/react";
+import React, { type RefObject } from "react";
 
-export default function Chat() {
+interface ChatProps {
+  editorRef: RefObject<any>;
+}
+
+export default function Chat({ editorRef }: ChatProps) {
   const { thread } = useTamboThread();
   const { value, setValue, submit, isPending } = useTamboThreadInput();
-
+    
   return (
     <div
       style={{
@@ -14,7 +19,7 @@ export default function Chat() {
         bottom: 20,
         right: 20,
         width: 320,
-        height: 380,
+        height: 610,
 
         display: "flex",
         flexDirection: "column",
@@ -66,12 +71,13 @@ export default function Chat() {
                 )
               : null}
 
-            {m.renderedComponent}
+            {m.renderedComponent && React.cloneElement(m.renderedComponent, { editorRef } as any)}
           </div>
         ))}
-
+        
         {isPending && <div style={{ opacity: 0.5 }}>Thinking…</div>}
       </div>
+        
 
       <div
         style={{
