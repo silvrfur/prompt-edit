@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useTamboThread, useTamboThreadInput } from "@tambo-ai/react";
+import { useTamboThreadInput } from "@tambo-ai/react";
 import { motion, AnimatePresence } from "framer-motion";
 import botIcon from "../assets/bot.png";
 
@@ -30,7 +30,6 @@ type ChatMessage = {
 };
 
 export default function Chat({ onRecommend, plan, toolSummary }: ChatProps) {
-  const { thread } = useTamboThread();
   const { value, setValue, submit, isPending } = useTamboThreadInput();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -49,7 +48,7 @@ export default function Chat({ onRecommend, plan, toolSummary }: ChatProps) {
             <img src={botIcon} alt="Bot" className="h-4 w-4" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-100">AI Mentor</p>
+            <p className="text-xs font-semibold text-slate-100">Buzz Bot</p>
             <p className="text-[11px] text-slate-400">Editing steps, not edits</p>
           </div>
         </div>
@@ -152,7 +151,7 @@ export default function Chat({ onRecommend, plan, toolSummary }: ChatProps) {
         </div>
         <div className="flex items-center gap-2 text-[10px] text-slate-400">
           <span className="h-1.5 w-1.5 rounded-full bg-cyan-400/70" />
-          The mentor never edits for you. It recommends tools, values, and why.
+          Buzz never edits for you. It recommends tools, values, and why.
         </div>
       </form>
     </section>

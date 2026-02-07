@@ -44,7 +44,7 @@ const MyImageEditor = forwardRef<EditorHandle>((_, ref) => {
           path: "https://picsum.photos/800/500",
           name: "SampleImage",
         },
-        menu: ["filter"],
+        menu: ["crop", "flip", "rotate", "draw", "shape", "text", "filter"],
         initMenu: "filter",
         uiSize: {
           width: "100%",
