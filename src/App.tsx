@@ -109,10 +109,10 @@ export default function App() {
               className="text-xs text-slate-400 hover:text-slate-100 transition flex items-center gap-2"
               aria-label="Back to landing"
             >
-              <span className="text-lg">&lt;-</span>
+              <span className="text-lg">&lt;</span>
             </button>
-            <div className="h-7 w-7 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center">
-              <img src={botIcon} alt="Bot" className="h-4 w-4" />
+            <div className="h-7 w-7 rounded-full overflow-hidden bg-teal-500/20 border border-teal-400/40 flex items-center justify-center">
+              <img src={botIcon} alt="Bot" className="h-full w-full object-cover" />
             </div>
             <div>
               <p className="text-sm font-semibold">Prompt Edit Studio</p>
@@ -124,7 +124,7 @@ export default function App() {
           <div className="flex items-center gap-3 text-xs">
             <div className="hidden sm:flex items-center gap-1 text-slate-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
-              <span>AI Mentor online</span>
+              <span>Buzz is online</span>
             </div>
             <input
               ref={fileInputRef}
@@ -138,16 +138,42 @@ export default function App() {
               }}
             />
             <button
-              className="h-7 px-3 rounded-full border border-slate-600/70 bg-slate-900/80 text-slate-200 text-xs"
+              className="group h-7 px-3 rounded-full border border-slate-600/70 bg-slate-900/80 text-slate-200 text-xs inline-flex items-center gap-1.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/60 hover:text-cyan-100 hover:shadow-[0_10px_24px_rgba(34,211,238,0.2)] active:translate-y-0"
               onClick={() => fileInputRef.current?.click()}
             >
-              Load
+              <span>Load</span>
+              <svg
+                viewBox="0 0 14 14"
+                className="h-3 w-3 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 3h6v6" />
+                <path d="M11 3 3 11" />
+              </svg>
             </button>
             <button
-              className="h-7 px-3 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-medium text-xs shadow-[0_12px_30px_rgba(251,191,36,0.5)]"
+              className="group h-7 px-3 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-medium text-xs shadow-[0_12px_30px_rgba(251,191,36,0.5)] inline-flex items-center gap-1.5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(251,146,60,0.55)] active:translate-y-0"
               onClick={() => editorRef.current?.download()}
             >
-              Download
+              <span>Download</span>
+              <svg
+                viewBox="0 0 14 14"
+                className="h-3 w-3 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 3h6v6" />
+                <path d="M11 3 3 11" />
+              </svg>
             </button>
           </div>
         </header>
