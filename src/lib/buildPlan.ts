@@ -23,6 +23,38 @@ export function buildPlan(prompt: string): PromptPlan | null {
 
   const tools: ToolSuggestion[] = [];
 
+  if (/(old money|luxury|classy|timeless|vogue|editorial)/.test(text)) {
+    addUnique(tools, {
+      name: "Brightness",
+      value: "-6",
+      percent: 45,
+      reason: "Slightly lowers exposure for a muted, timeless feel.",
+      control: "slider",
+    });
+    addUnique(tools, {
+      name: "Color Filter",
+      value: "Warm 15",
+      percent: 55,
+      reason: "Adds gentle golden warmth for a vintage luxury tone.",
+      control: "slider",
+    });
+    
+    addUnique(tools, {
+      name: "Sepia",
+      value: "On",
+      percent: 100,
+      reason: "Applies a soft sepia wash for a classic editorial look.",
+      control: "checkbox",
+    });
+    addUnique(tools, {
+      name: "Sharpen",
+      value: "On",
+      percent: 100,
+      reason: "Adds subtle detail without harshness, like fashion photography.",
+      control: "checkbox",
+    });
+  }
+
   if (/(cinematic|movie|film look|teal and orange|golden hour)/.test(text)) {
     addUnique(tools, {
       name: "Brightness",
@@ -40,10 +72,10 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "+10",
-      percent: 65,
+      value: "On",
+      percent: 100,
       reason: "Brings out edge detail like a graded film still.",
-      control: "slider",
+      control: "checkbox",
     });
     addUnique(tools, {
       name: "Noise",
@@ -71,10 +103,10 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Blur",
-      value: "2",
-      percent: 25,
+      value: "On",
+      percent: 100,
       reason: "Softens edges slightly for a dreamy look.",
-      control: "slider",
+      control: "checkbox",
     });
   }
 
@@ -95,20 +127,30 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "+8",
-      percent: 45,
+      value: "On",
+      percent: 100,
       reason: "Keeps details crisp in the shadows.",
-      control: "slider",
+      control: "checkbox",
     });
   }
+
+  if (/(blur|out of focus|misty)/.test(text)) {
+  addUnique(tools, {
+    name: "Blur",
+    value: "On",
+    percent: 100,
+    reason: "Softens edges for a hazy, dreamy feel.",
+    control: "checkbox",
+  });
+}
 
   if (/(dreamy|soft|hazy|ethereal)/.test(text)) {
     addUnique(tools, {
       name: "Blur",
-      value: "4",
-      percent: 40,
+      value: "On",
+      percent: 100,
       reason: "Softens edges for a dreamy, hazy feel.",
-      control: "slider",
+      control: "checkbox",
     });
     addUnique(tools, {
       name: "Brightness",
@@ -160,10 +202,10 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "+8",
-      percent: 40,
+      value: "On",
+      percent: 100,
       reason: "Adds clarity so details feel crisper.",
-      control: "slider",
+      control: "checkbox",
     });
   }
 
@@ -180,20 +222,20 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(soft|dreamy|haze)/.test(text)) {
     addUnique(tools, {
       name: "Blur",
-      value: "4",
-      percent: 25,
+      value: "On",
+      percent: 100,
       reason: "Softens harsh edges for a dreamy look.",
-      control: "slider",
+      control: "checkbox",
     });
   }
 
   if (/(sharp|clarity|detail)/.test(text)) {
     addUnique(tools, {
       name: "Sharpen",
-      value: "+14",
-      percent: 75,
+      value: "On",
+      percent: 100,
       reason: "Improves micro-contrast on edges.",
-      control: "slider",
+      control: "checkbox",
     });
   }
 
@@ -257,10 +299,10 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "+6",
-      percent: 30,
+      value: "On",
+      percent: 100,
       reason: "Adds subtle detail without harshness.",
-      control: "slider",
+      control: "checkbox",
     });
   }
 

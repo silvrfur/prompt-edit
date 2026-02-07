@@ -41,7 +41,7 @@ export default function Chat({ onRecommend, plan, toolSummary }: ChatProps) {
   ]);
 
   return (
-    <section className="h-full rounded-3xl bg-gradient-to-b from-white/10 via-white/5 to-white/[0.02] border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col">
+    <section className="h-125 rounded-3xl bg-gradient-to-b from-white/10 via-white/5 to-white/[0.02] border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col">
       <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center">

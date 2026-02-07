@@ -63,29 +63,36 @@ export default function App() {
   }
 
   const applyFilter = (name: string, value: number) => {
-  if (name === "Brightness") {
-    editorRef.current?.applyFilter("Brightness", { brightness: value });
-  }
-  if (name === "Sharpen") {
-    editorRef.current?.applyFilter("Sharpen", { level: Math.max(0, value) });
-  }
-  if (name === "Blur") {
-    editorRef.current?.applyFilter("Blur", { blur: Math.max(0, value) / 10 });
-  }
-  if (name === "Noise") {
-    editorRef.current?.applyFilter("Noise", { noise: Math.max(0, value) / 100 });
-  }
-  if (name === "Pixelate") {
-    editorRef.current?.applyFilter("Pixelate", { pixelate: Math.max(1, Math.abs(value)) });
-  }
-  if (name === "Color Filter") {
-    editorRef.current?.applyFilter("ColorFilter", {
-      type: "tint",
-      color: "#ff9f43",
-      opacity: Math.min(1, Math.max(0.1, Math.abs(value) / 30)),
-    });
-  }
-};
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    // ensure filter module is active
+    editor.ui?.activeMenuEvent("filter");
+
+    if (name === "Brightness") {
+      editor.removeFilter("brightness");
+      editorRef.current?.applyFilter("Brightness", { brightness: value });
+    }
+    if (name === "Sharpen") {
+      editorRef.current?.applyFilter("Sharpen", { level: Math.max(0, value) });
+    }
+    if (name === "Blur") {
+      editorRef.current?.applyFilter("Blur", { blur: Math.max(0, value) / 10 });
+    }
+    if (name === "Noise") {
+      editorRef.current?.applyFilter("Noise", { noise: Math.max(0, value) / 100 });
+    }
+    if (name === "Pixelate") {
+      editorRef.current?.applyFilter("Pixelate", { pixelate: Math.max(1, Math.abs(value)) });
+    }
+    if (name === "Color Filter") {
+      editorRef.current?.applyFilter("ColorFilter", {
+        type: "tint",
+        color: "#ff9f43",
+        opacity: Math.min(1, Math.max(0.1, Math.abs(value) / 30)),
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#050712] text-slate-100 flex items-stretch justify-center relative overflow-hidden">
@@ -182,7 +189,7 @@ export default function App() {
                         Based on: "{plan.prompt}"
                       </span>
                     ) : (
-                      <span className="text-slate-500">
+                      <span className="text-slate-400">
                         Ask the AI mentor to generate controls
                       </span>
                     )}

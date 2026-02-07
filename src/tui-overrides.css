@@ -1,0 +1,52 @@
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-submenu {
+  overflow: visible !important;
+  max-height: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  padding: 16px !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-controls {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-checkbox {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-range-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-range {
+  width: 100% !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-color-picker {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  justify-content: flex-start !important;
+}
+
+.tui-image-editor-container .tui-image-editor-filter .tui-image-editor-color-picker > div {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(255,255,255,0.2) !important;
+}

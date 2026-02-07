@@ -11,6 +11,7 @@ export type EditorHandle = {
   download: () => void;
   applyFilter: (name: string, options?: any) => void;
   removeFilter: (name: string) => void;
+  ui?: any;
 };
 
 const MyImageEditor = forwardRef<EditorHandle>((_, ref) => {
@@ -91,6 +92,7 @@ const MyImageEditor = forwardRef<EditorHandle>((_, ref) => {
       if (!instanceRef.current) return;
       instanceRef.current.removeFilter(name);
     },
+    ui: instanceRef.current?.ui,
   }));
 
   return <div ref={editorRef} style={{ height: "100%", width: "100%" }} />;
