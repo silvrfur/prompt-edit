@@ -4,12 +4,41 @@ import Landing from "./components/Landing";
 import Chat from "./components/Chat";
 import MyImageEditor from "./components/ImageEditor";
 import type { EditorHandle } from "./components/ImageEditor";
+import SharedFooter from "./components/SharedFooter";
 import "./App.css";
 import botIcon from "./assets/bot.png";
 import { buildPlan, type PromptPlan } from "./lib/buildPlan";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
+
+const normalizeToolKey = (name: string) =>
+  name.toLowerCase().replace(/[\s_-]/g, "");
+
+const normalizeDistance = (value: number) => {
+  if (!Number.isFinite(value)) return 0.2;
+  if (value >= 0 && value <= 1) return value;
+  if (value <= 30) return clamp(value / 30, 0, 1);
+  return clamp(value / 100, 0, 1);
+};
+
+const normalizeBrightness = (value: number) => {
+  if (!Number.isFinite(value)) return 0;
+  if (value >= -1 && value <= 1) return value;
+  return clamp(value / 30, -1, 1);
+};
+
+const normalizeBlur = (value: number) => {
+  if (!Number.isFinite(value)) return 0.1;
+  if (value >= 0 && value <= 1) return value;
+  return clamp(value / 10, 0, 1);
+};
+
+const normalizeNoise = (value: number) => {
+  if (!Number.isFinite(value)) return 0;
+  if (value > 100) return Math.round(value);
+  return Math.round(clamp(value, 0, 30) * (1000 / 30));
+};
 
 const sliderRanges: Record<string, { min: number; max: number }> = {
   Brightness: { min: -30, max: 30 },
@@ -18,6 +47,25 @@ const sliderRanges: Record<string, { min: number; max: number }> = {
   Noise: { min: 0, max: 30 },
   Pixelate: { min: 1, max: 20 },
   "Color Filter": { min: 0, max: 30 },
+  "Color Filter Threshold": { min: 0, max: 30 },
+  Threshold: { min: 0, max: 30 },
+  "Remove White Distance": { min: 0, max: 30 },
+};
+
+const filterNameMap: Record<string, string> = {
+  brightness: "brightness",
+  blur: "blur",
+  sharpen: "sharpen",
+  noise: "noise",
+  pixelate: "pixelate",
+  grayscale: "grayscale",
+  invert: "invert",
+  sepia: "sepia",
+  removewhite: "removeWhite",
+  removewhitedistance: "removeWhite",
+  colorfilter: "colorFilter",
+  colorfilterthreshold: "colorFilter",
+  threshold: "colorFilter",
 };
 
 export default function App() {
@@ -69,39 +117,71 @@ export default function App() {
     // ensure filter module is active
     editor.ui?.activeMenuEvent("filter");
 
-    if (name === "Brightness") {
-      editor.removeFilter("brightness");
-      editorRef.current?.applyFilter("Brightness", { brightness: value });
+    const filterName = filterNameMap[normalizeToolKey(name)];
+    if (!filterName) return;
+
+    let options: Record<string, unknown> = {};
+
+    if (filterName === "brightness") {
+      options = { brightness: normalizeBrightness(value) };
+    } else if (filterName === "noise") {
+      options = { noise: normalizeNoise(value) };
+    } else if (filterName === "pixelate") {
+      options = { blocksize: clamp(Math.round(Math.abs(value)), 2, 20) };
+    } else if (filterName === "blur") {
+      options = { blur: normalizeBlur(value) };
+    } else if (filterName === "colorFilter") {
+      options = { color: "#FFFFFF", distance: normalizeDistance(Math.abs(value)) };
+    } else if (filterName === "removeWhite") {
+      options = {
+        color: "#FFFFFF",
+        useAlpha: false,
+        distance: normalizeDistance(Math.abs(value)),
+      };
     }
-    if (name === "Sharpen") {
-      editorRef.current?.applyFilter("Sharpen", { level: Math.max(0, value) });
+
+    editorRef.current?.applyFilter(filterName, options);
+  };
+
+  const toggleFilter = (name: string, checked: boolean) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    editor.ui?.activeMenuEvent("filter");
+    const filterName = filterNameMap[normalizeToolKey(name)];
+    if (!filterName) return;
+
+    if (!checked) {
+      editor.removeFilter(filterName);
+      return;
     }
-    if (name === "Blur") {
-      editorRef.current?.applyFilter("Blur", { blur: Math.max(0, value) / 10 });
+
+    if (filterName === "colorFilter") {
+      editor.applyFilter(filterName, { color: "#FFFFFF", distance: 0.2 });
+      return;
     }
-    if (name === "Noise") {
-      editorRef.current?.applyFilter("Noise", { noise: Math.max(0, value) / 100 });
+
+    if (filterName === "removeWhite") {
+      editor.applyFilter(filterName, { color: "#FFFFFF", useAlpha: false, distance: 0.2 });
+      return;
     }
-    if (name === "Pixelate") {
-      editorRef.current?.applyFilter("Pixelate", { pixelate: Math.max(1, Math.abs(value)) });
+
+    if (filterName === "blur") {
+      editor.applyFilter(filterName, { blur: 0.1 });
+      return;
     }
-    if (name === "Color Filter") {
-      editorRef.current?.applyFilter("ColorFilter", {
-        type: "tint",
-        color: "#ff9f43",
-        opacity: Math.min(1, Math.max(0.1, Math.abs(value) / 30)),
-      });
-    }
+
+    editor.applyFilter(filterName, {});
   };
 
   return (
-    <div className="min-h-screen bg-[#050712] text-slate-100 flex items-stretch justify-center relative overflow-hidden">
+    <div className="min-h-screen text-slate-100 flex items-stretch justify-center relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-40 left-[10%] h-80 w-80 bg-cyan-500/20 blur-[120px] animate-[glowPulse_9s_ease-in-out_infinite]" />
         <div className="absolute -bottom-44 right-[8%] h-96 w-96 bg-rose-500/20 blur-[140px] animate-[glowPulse_11s_ease-in-out_infinite]" />
       </div>
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex flex-col gap-4">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 pb-0 min-h-screen flex flex-col gap-4">
         <header className="rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-white/10 px-4 sm:px-6 py-3 flex items-center justify-between shadow-[0_18px_50px_rgba(0,0,0,0.8)]">
           <div className="flex items-center gap-3">
             <button
@@ -178,7 +258,7 @@ export default function App() {
           </div>
         </header>
 
-        <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-5">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-5">
           <motion.section
             className="flex-1 rounded-3xl relative overflow-hidden bg-gradient-to-b from-white/5 via-white/3 to-white/[0.02] border border-white/10 shadow-[0_22px_70px_rgba(0,0,0,0.9)] backdrop-blur-2xl flex flex-col"
             initial={{ opacity: 0, y: 18 }}
@@ -190,16 +270,16 @@ export default function App() {
               <div className="absolute -bottom-40 -left-16 h-64 w-64 bg-rose-500/20 blur-3xl" />
             </div>
 
-            <div className="relative z-10 flex flex-col h-full">
+            <div className="relative z-10 flex flex-col">
               <div className="px-4 sm:px-5 pt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[11px] text-slate-300">
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
                   <span>Editor Playground</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full border border-white/10 bg-black/40 px-2 py-0.5">
+                  {/* <span className="rounded-full border border-white/10 bg-black/40 px-2 py-0.5">
                     Toast UI engine
-                  </span>
+                  </span> */}
                   <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-200">
                     You make every change
                   </span>
@@ -282,11 +362,7 @@ export default function App() {
                                     ...prev,
                                     [tool.name]: checked,
                                   }));
-                                  if (checked) {
-                                    editorRef.current?.applyFilter(tool.name);
-                                  } else {
-                                    editorRef.current?.removeFilter(tool.name);
-                                  }
+                                  toggleFilter(tool.name, checked);
                                 }}
                               />
                               Enable
@@ -307,23 +383,32 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex-1 px-3 sm:px-4 pb-4">
-                <div className="w-full h-full rounded-2xl bg-[#050816] border border-white/10 overflow-hidden">
-                  <MyImageEditor ref={editorRef} />
+              <div className="px-3 sm:px-4 pb-4">
+                <div className="w-full rounded-2xl bg-[#050816] border border-white/10 overflow-hidden">
+                  <MyImageEditor ref={editorRef} submenuHostId="toast-submenu-host" />
                 </div>
               </div>
             </div>
           </motion.section>
 
           <motion.section
-            className="w-full lg:max-w-sm xl:max-w-md flex-shrink-0"
+            className="w-full lg:max-w-sm xl:max-w-md flex-shrink-0 flex flex-col gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
           >
             <Chat onRecommend={handleRecommend} plan={plan} toolSummary={toolSummary} />
+            <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+              <p className="mb-2 text-[11px] text-slate-400">Editing Panel</p>
+              <div
+                id="toast-submenu-host"
+                className="w-full h-[240px] overflow-x-auto overflow-y-auto custom-scrollbar"
+              />
+            </div>
           </motion.section>
         </div>
+
+        <SharedFooter className="mt-auto" />
       </div>
     </div>
   );

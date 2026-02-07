@@ -43,6 +43,7 @@
   background: radial-gradient(circle at top, rgba(45, 226, 230, 0.08), transparent 55%),
     linear-gradient(180deg, rgba(9, 12, 26, 0.92), rgba(8, 10, 20, 0.96));
   border-radius: 18px;
+  overflow: hidden !important;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.55);
 }
@@ -55,6 +56,8 @@
 .tui-image-editor-controls {
   background: linear-gradient(180deg, rgba(8, 11, 24, 0.97), rgba(8, 11, 24, 0.92));
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
   backdrop-filter: blur(8px) saturate(130%);
   -webkit-backdrop-filter: blur(8px) saturate(130%);
   box-shadow:
@@ -80,6 +83,11 @@
 .tui-image-editor-menu .tui-image-editor-item.active,
 .tui-image-editor-menu .tui-image-editor-item:hover {
   color: var(--pe-cyan);
+}
+
+.tui-image-editor-container .tui-image-editor-menu > .tui-image-editor-item.active {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .tui-image-editor-menu .tui-image-editor-item {
@@ -109,7 +117,26 @@
   display: none !important;
 }
 .tui-image-editor-container .tui-image-editor-main {
-  top: 0 !important;
+  top: 75px !important;
+}
+.tui-image-editor-container .tui-image-editor-wrap {
+  overflow: hidden !important;
+}
+.tui-image-editor-container .tui-image-editor-align-wrap {
+  vertical-align: top !important;
+}
+
+.tui-image-editor-container .tui-image-editor-help-menu.top {
+  top: 12px !important;
+  padding: 4px 10px !important;
+  height: 48px !important;
+  width: fit-content !important;
+  max-width: calc(100% - 24px) !important;
+}
+
+.tui-image-editor-container .tui-image-editor-help-menu.top > .tui-image-editor-item {
+  margin: 0 6px !important;
+  padding: 8px 9px !important;
 }
 
 /* Toast UI submenu: classic layout with subtle polish */
@@ -163,4 +190,219 @@
 .tui-image-editor-controls .tui-image-editor-button,
 .tui-image-editor-menu .tui-image-editor-button {
   border-radius: 12px;
+}
+
+#toast-submenu-host .tui-image-editor-submenu {
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  left: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  background: rgba(10, 14, 28, 0.98) !important;
+}
+
+#toast-submenu-host .tui-image-editor-submenu .tui-image-editor-submenu-title {
+  display: none !important;
+}
+
+#toast-submenu-host .tui-image-editor-submenu > div:not(.tui-image-editor-menu-filter) {
+  display: none !important;
+}
+
+#toast-submenu-host .tui-image-editor-submenu > div.tui-image-editor-menu-filter {
+  display: table-cell !important;
+}
+
+#toast-submenu-host .tui-image-editor-submenu .tui-image-editor-submenu-item {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  white-space: normal;
+  width: 100%;
+}
+
+#toast-submenu-host .tui-image-editor-submenu .tui-image-editor-submenu-item > li {
+  display: block !important;
+  float: none !important;
+  width: min(100%, 560px);
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#toast-submenu-host .tui-image-editor-checkbox-group {
+  min-width: 180px;
+}
+
+#toast-submenu-host .tui-image-editor-range-wrap.short {
+  min-width: 170px;
+}
+
+#toast-submenu-host .tui-image-editor-range-wrap.short label {
+  display: inline-block;
+  min-width: 64px;
+}
+
+#toast-submenu-host .tie-removewhite-distance-range,
+#toast-submenu-host .tie-brightness-range,
+#toast-submenu-host .tie-noise-range,
+#toast-submenu-host .tie-pixelate-range,
+#toast-submenu-host .tie-colorfilter-threshold-range {
+  min-width: 120px;
+}
+
+#toast-submenu-host .tui-image-editor-range-wrap {
+  display: inline-block !important;
+  margin-left: 4px;
+}
+
+#toast-submenu-host .tui-image-editor-range-wrap.short .tui-image-editor-range {
+  width: 120px;
+}
+
+#toast-submenu-host .tui-image-editor-range {
+  position: relative;
+  top: 5px;
+  width: 166px;
+  height: 17px;
+  display: inline-block;
+}
+
+#toast-submenu-host .tui-image-editor-virtual-range-bar {
+  top: 7px;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(148, 163, 184, 0.45);
+}
+
+#toast-submenu-host .tui-image-editor-virtual-range-subbar {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgba(45, 226, 230, 0.8);
+}
+
+#toast-submenu-host .tui-image-editor-virtual-range-pointer {
+  position: absolute;
+  cursor: pointer;
+  top: -5px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.6);
+}
+
+#toast-submenu-host .tui-image-editor-checkbox-group.tui-image-editor-disabled .tui-image-editor-virtual-range-bar,
+#toast-submenu-host .tui-image-editor-checkbox-group.tui-image-editor-disabled .tui-image-editor-virtual-range-subbar,
+#toast-submenu-host .tui-image-editor-checkbox-group.tui-image-editor-disabled .tui-image-editor-virtual-range-pointer {
+  opacity: 0.55;
+}
+
+/* Toast filter panel redesign (inspired card style, theme-aligned) */
+#toast-submenu-host {
+  border: 1px solid rgba(120, 133, 255, 0.18);
+  border-radius: 14px;
+  padding: 10px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(45, 226, 230, 0.1) 0%, rgba(0, 0, 0, 0) 45%),
+    radial-gradient(120% 90% at 100% 100%, rgba(251, 146, 60, 0.08) 0%, rgba(0, 0, 0, 0) 48%),
+    linear-gradient(180deg, rgba(16, 18, 38, 0.92), rgba(9, 11, 24, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 12px 30px rgba(5, 8, 20, 0.45);
+}
+
+#toast-submenu-host .tui-image-editor-submenu {
+  background: transparent !important;
+  padding: 0px 36px !important;
+}
+
+#toast-submenu-host .tui-image-editor-submenu .tui-image-editor-submenu-item > li {
+  background: linear-gradient(180deg, rgba(25, 28, 56, 0.56), rgba(13, 15, 33, 0.62));
+  border: 1px solid rgba(132, 142, 255, 0.18);
+  border-radius: 12px;
+  padding: 10px 12px !important;
+  margin: 0 0 10px 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+#toast-submenu-host .tui-image-editor-submenu .tui-image-editor-partition {
+  display: none !important;
+}
+
+#toast-submenu-host .tui-image-editor-checkbox-wrap.fixed-width {
+  width: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 8px 12px;
+}
+
+#toast-submenu-host .tui-image-editor-checkbox {
+  margin: 0 !important;
+}
+
+#toast-submenu-host .tui-image-editor-checkbox > label > span {
+  color: rgba(224, 232, 250, 0.95);
+  padding-left: 2px;
+}
+
+#toast-submenu-host .tui-image-editor-checkbox input + span:before,
+#toast-submenu-host .tui-image-editor-checkbox > label > span:before {
+  border-radius: 6px !important;
+  background: linear-gradient(180deg, rgba(34, 38, 71, 0.95), rgba(20, 22, 40, 0.95)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(170, 178, 255, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+#toast-submenu-host .tui-image-editor-checkbox input[type='checkbox']:checked + span:before {
+  background-image: none !important;
+  background: linear-gradient(180deg, rgba(112, 244, 190, 0.95), rgba(57, 203, 157, 0.95)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(209, 255, 236, 0.55),
+    0 0 12px rgba(73, 241, 191, 0.35);
+}
+
+#toast-submenu-host .tui-image-editor-range-wrap.short label {
+  color: rgba(173, 183, 214, 0.95) !important;
+}
+
+#toast-submenu-host .tui-image-editor-virtual-range-bar {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.28);
+}
+
+#toast-submenu-host .tie-brightness-range .tui-image-editor-virtual-range-subbar,
+#toast-submenu-host .tie-colorfilter-threshold-range .tui-image-editor-virtual-range-subbar {
+  background: linear-gradient(90deg, #52d8ff 0%, #b385ff 55%, #ffb347 100%);
+}
+
+#toast-submenu-host .tie-noise-range .tui-image-editor-virtual-range-subbar {
+  background: linear-gradient(90deg, #58d5ff 0%, #b0e6ff 45%, #ffd166 100%);
+}
+
+#toast-submenu-host .tie-pixelate-range .tui-image-editor-virtual-range-subbar,
+#toast-submenu-host .tie-removewhite-distance-range .tui-image-editor-virtual-range-subbar {
+  background: linear-gradient(90deg, #7f8aa8 0%, #c29cff 65%, #ff9f43 100%);
+}
+
+#toast-submenu-host .tui-image-editor-virtual-range-pointer {
+  width: 11px;
+  height: 11px;
+  top: -4px;
+  background: #e9d5ff;
+  box-shadow:
+    0 0 0 1px rgba(232, 210, 255, 0.9),
+    0 0 14px rgba(196, 123, 255, 0.45);
 }

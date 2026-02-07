@@ -10,7 +10,9 @@ export const TOOL_TO_TUI: Record<string, string> = {
   grayscale: "grayscale",
   sepia: "sepia",
   sepia2: "sepia2",
+  removewhite: "removeWhite",
   emboss: "emboss",
   removeWhite: "removeWhite",
+  colorfilter: "colorFilter",
   colorFilter: "colorFilter",
 };
