@@ -102,10 +102,10 @@ export default function App() {
               className="text-xs text-slate-400 hover:text-slate-100 transition flex items-center gap-2"
               aria-label="Back to landing"
             >
-              <span className="text-lg">&lt;-</span>
+              <span className="text-lg">&lt;</span>
             </button>
-            <div className="h-7 w-7 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center">
-              <img src={botIcon} alt="Bot" className="h-4 w-4" />
+            <div className="h-7 w-7 rounded-full overflow-hidden bg-teal-500/20 border border-teal-400/40 flex items-center justify-center">
+              <img src={botIcon} alt="Bot" className="h-full w-full object-cover" />
             </div>
             <div>
               <p className="text-sm font-semibold">Prompt Edit Studio</p>
@@ -117,7 +117,7 @@ export default function App() {
           <div className="flex items-center gap-3 text-xs">
             <div className="hidden sm:flex items-center gap-1 text-slate-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
-              <span>AI Mentor online</span>
+              <span>Buzz is online</span>
             </div>
             <input
               ref={fileInputRef}
