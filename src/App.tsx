@@ -6,20 +6,7 @@ import MyImageEditor from "./components/ImageEditor";
 import type { EditorHandle } from "./components/ImageEditor";
 import "./App.css";
 import botIcon from "./assets/bot.png";
-
-type ToolSuggestion = {
-  name: string;
-  value: string;
-  percent: number;
-  reason: string;
-  control: "checkbox" | "slider";
-};
-
-type PromptPlan = {
-  prompt: string;
-  summary: string;
-  tools: ToolSuggestion[];
-};
+import { buildPlan, type PromptPlan } from "./lib/buildPlan";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
@@ -32,154 +19,6 @@ const sliderRanges: Record<string, { min: number; max: number }> = {
   Pixelate: { min: 1, max: 20 },
   "Color Filter": { min: 0, max: 30 },
 };
-
-function buildPlan(prompt: string): PromptPlan | null {
-  const cleaned = prompt.trim();
-  if (!cleaned) return null;
-  const text = cleaned.toLowerCase();
-
-  const tools: ToolSuggestion[] = [];
-  const add = (t: ToolSuggestion) => {
-    if (!tools.find((x) => x.name === t.name)) tools.push(t);
-  };
-
-  if (/(vibrant|vivid|pop|color|colorful|saturat)/.test(text)) {
-    add({
-      name: "Color Filter",
-      value: "Warm 20",
-      percent: 65,
-      reason: "Boosts color energy without clipping highlights.",
-      control: "slider",
-    });
-    add({
-      name: "Brightness",
-      value: "+12",
-      percent: 55,
-      reason: "Lifts midtones for a cleaner, brighter feel.",
-      control: "slider",
-    });
-    add({
-      name: "Sharpen",
-      value: "+8",
-      percent: 40,
-      reason: "Adds clarity so details feel crisper.",
-      control: "slider",
-    });
-  }
-
-  if (/(dark|dim|underexposed|brighten|exposure|lighten)/.test(text)) {
-    add({
-      name: "Brightness",
-      value: "+18",
-      percent: 70,
-      reason: "Raises overall exposure for readability.",
-      control: "slider",
-    });
-  }
-
-  if (/(cinematic|warm|golden|sunset)/.test(text)) {
-    add({
-      name: "Color Filter",
-      value: "Warm 25",
-      percent: 70,
-      reason: "Warms highlights to create cinematic tones.",
-      control: "slider",
-    });
-  }
-
-  if (/(soft|dreamy|haze)/.test(text)) {
-    add({
-      name: "Blur",
-      value: "4",
-      percent: 25,
-      reason: "Softens harsh edges for a dreamy look.",
-      control: "slider",
-    });
-  }
-
-  if (/(sharp|clarity|detail)/.test(text)) {
-    add({
-      name: "Sharpen",
-      value: "+14",
-      percent: 75,
-      reason: "Improves micro-contrast on edges.",
-      control: "slider",
-    });
-  }
-
-  if (/(grain|noise|film)/.test(text)) {
-    add({
-      name: "Noise",
-      value: "+10",
-      percent: 55,
-      reason: "Adds controlled texture for film-like grain.",
-      control: "slider",
-    });
-  }
-
-  if (/(black and white|bw|monochrome|grayscale)/.test(text)) {
-    add({
-      name: "Grayscale",
-      value: "On",
-      percent: 100,
-      reason: "Removes color for a true monochrome look.",
-      control: "checkbox",
-    });
-  }
-
-  if (/(vintage|retro|sepia)/.test(text)) {
-    add({
-      name: "Sepia",
-      value: "On",
-      percent: 100,
-      reason: "Adds warm vintage tones.",
-      control: "checkbox",
-    });
-  }
-
-  if (/(pixel|pixelate|mosaic)/.test(text)) {
-    add({
-      name: "Pixelate",
-      value: "12",
-      percent: 60,
-      reason: "Creates a stylized mosaic effect.",
-      control: "slider",
-    });
-  }
-
-  if (/(invert|negative)/.test(text)) {
-    add({
-      name: "Invert",
-      value: "On",
-      percent: 100,
-      reason: "Flips tones for a negative-style look.",
-      control: "checkbox",
-    });
-  }
-
-  if (tools.length === 0) {
-    add({
-      name: "Brightness",
-      value: "+8",
-      percent: 40,
-      reason: "A safe first adjustment for most photos.",
-      control: "slider",
-    });
-    add({
-      name: "Sharpen",
-      value: "+6",
-      percent: 30,
-      reason: "Adds subtle detail without harshness.",
-      control: "slider",
-    });
-  }
-
-  return {
-    prompt: cleaned,
-    summary: "Recommended adjustments generated from your prompt.",
-    tools,
-  };
-}
 
 export default function App() {
   const [mode, setMode] = useState<"landing" | "editor">("landing");
@@ -222,6 +61,31 @@ export default function App() {
   if (mode === "landing") {
     return <Landing onStart={() => setMode("editor")} />;
   }
+
+  const applyFilter = (name: string, value: number) => {
+  if (name === "Brightness") {
+    editorRef.current?.applyFilter("Brightness", { brightness: value });
+  }
+  if (name === "Sharpen") {
+    editorRef.current?.applyFilter("Sharpen", { level: Math.max(0, value) });
+  }
+  if (name === "Blur") {
+    editorRef.current?.applyFilter("Blur", { blur: Math.max(0, value) / 10 });
+  }
+  if (name === "Noise") {
+    editorRef.current?.applyFilter("Noise", { noise: Math.max(0, value) / 100 });
+  }
+  if (name === "Pixelate") {
+    editorRef.current?.applyFilter("Pixelate", { pixelate: Math.max(1, Math.abs(value)) });
+  }
+  if (name === "Color Filter") {
+    editorRef.current?.applyFilter("ColorFilter", {
+      type: "tint",
+      color: "#ff9f43",
+      opacity: Math.min(1, Math.max(0.1, Math.abs(value) / 30)),
+    });
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#050712] text-slate-100 flex items-stretch justify-center relative overflow-hidden">
@@ -337,67 +201,41 @@ export default function App() {
                           </div>
                           {tool.control === "slider" ? (
                             <div className="mt-2 flex items-center gap-2">
+                              <button
+                                className="px-2 py-1 rounded-md bg-slate-800 border border-white/10 text-xs"
+                                onClick={() => {
+                                  const range = sliderRanges[tool.name] ?? { min: -30, max: 30 };
+                                  const next = clamp((controlValues[tool.name] ?? 0) - 1, range.min, range.max);
+                                  setControlValues((prev) => ({ ...prev, [tool.name]: next }));
+                                  applyFilter(tool.name, next);
+                                }}
+                              >
+                                -
+                              </button>
+
                               <input
-                                type="range"
-                                min={sliderRanges[tool.name]?.min ?? -30}
-                                max={sliderRanges[tool.name]?.max ?? 30}
+                                type="number"
+                                className="w-16 bg-slate-900 border border-white/10 rounded-md px-2 py-1 text-xs text-slate-200"
                                 value={controlValues[tool.name] ?? 0}
                                 onChange={(e) => {
-                                  const range =
-                                    sliderRanges[tool.name] ?? {
-                                      min: -30,
-                                      max: 30,
-                                    };
-                                  const next = clamp(
-                                    Number(e.target.value),
-                                    range.min,
-                                    range.max
-                                  );
-                                  setControlValues((prev) => ({
-                                    ...prev,
-                                    [tool.name]: next,
-                                  }));
-                                  if (tool.name === "Brightness") {
-                                    editorRef.current?.applyFilter("Brightness", {
-                                      brightness: next,
-                                    });
-                                  }
-                                  if (tool.name === "Sharpen") {
-                                    editorRef.current?.applyFilter("Sharpen", {
-                                      level: Math.max(0, next),
-                                    });
-                                  }
-                                  if (tool.name === "Blur") {
-                                    editorRef.current?.applyFilter("Blur", {
-                                      blur: Math.max(0, next) / 10,
-                                    });
-                                  }
-                                  if (tool.name === "Noise") {
-                                    editorRef.current?.applyFilter("Noise", {
-                                      noise: Math.max(0, next) / 100,
-                                    });
-                                  }
-                                  if (tool.name === "Pixelate") {
-                                    editorRef.current?.applyFilter("Pixelate", {
-                                      pixelate: Math.max(1, Math.abs(next)),
-                                    });
-                                  }
-                                  if (tool.name === "Color Filter") {
-                                    editorRef.current?.applyFilter("ColorFilter", {
-                                      type: "tint",
-                                      color: "#ff9f43",
-                                      opacity: Math.min(
-                                        1,
-                                        Math.max(0.1, Math.abs(next) / 30)
-                                      ),
-                                    });
-                                  }
+                                  const range = sliderRanges[tool.name] ?? { min: -30, max: 30 };
+                                  const next = clamp(Number(e.target.value), range.min, range.max);
+                                  setControlValues((prev) => ({ ...prev, [tool.name]: next }));
+                                  applyFilter(tool.name, next);
                                 }}
-                                className="flex-1 accent-cyan-400"
                               />
-                              <span className="text-[11px] text-slate-400 w-10 text-right">
-                                {controlValues[tool.name] ?? 0}
-                              </span>
+
+                              <button
+                                className="px-2 py-1 rounded-md bg-slate-800 border border-white/10 text-xs"
+                                onClick={() => {
+                                  const range = sliderRanges[tool.name] ?? { min: -30, max: 30 };
+                                  const next = clamp((controlValues[tool.name] ?? 0) + 1, range.min, range.max);
+                                  setControlValues((prev) => ({ ...prev, [tool.name]: next }));
+                                  applyFilter(tool.name, next);
+                                }}
+                              >
+                                +
+                              </button>
                             </div>
                           ) : (
                             <label className="mt-2 inline-flex items-center gap-2 text-[11px] text-slate-300">

@@ -111,25 +111,52 @@ export default function Chat({ onRecommend, plan, toolSummary }: ChatProps) {
       <form
         className="px-3 py-2 border-t border-white/10 flex flex-col gap-2"
         onSubmit={(e) => {
-          e.preventDefault();
-          const trimmed = value.trim();
-          if (!trimmed) return;
-          setMessages((prev) => [
-            ...prev,
-            { id: `u-${Date.now()}`, role: "user", content: trimmed },
-          ]);
-          onRecommend(trimmed);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `a-${Date.now()}`,
-              role: "assistant",
-              content:
-                "Got it. I have generated the exact tools and suggested values. Review the recommendation below and apply each step in order.",
-            },
-          ]);
-          submit();
-        }}
+        e.preventDefault();
+        const trimmed = value.trim();
+        if (!trimmed) return;
+
+        const id = Date.now();
+
+        setMessages((prev) => [
+          ...prev,
+          { id: `u-${id}`, role: "user", content: trimmed },
+        ]);
+
+        onRecommend(trimmed);
+
+        // simple intent-based flavor text
+        const lower = trimmed.toLowerCase();
+        let reply =
+          "Got it. I’ve generated a set of tools and starting values. Review them below and apply each step in order.";
+
+        if (/(cinematic|movie|film look|teal and orange)/.test(lower)) {
+          reply =
+            "Love that cinematic direction. I’ve suggested tools and values that push this toward a graded film still—try them in order.";
+        } else if (/(pinterest|aesthetic|pinteresty|soft vibe|cozy)/.test(lower)) {
+          reply =
+            "Going for that Pinterest aesthetic—nice. I’ve picked gentle, bright, soft adjustments that lean into that vibe.";
+        } else if (/(moody|dark vibe|dramatic shadows|low key)/.test(lower)) {
+          reply =
+            "Moody it is. I’ve dialed in darker, cooler, more dramatic settings you can apply step by step.";
+        } else if (/(dreamy|soft|hazy|ethereal)/.test(lower)) {
+          reply =
+            "Dreamy and soft—great choice. I’ve lined up haze-friendly tweaks you can layer to get there.";
+        } else if (/(film|grainy|analog|retro)/.test(lower)) {
+          reply =
+            "Chasing that film look—perfect. I’ve added grainy, warm, slightly faded adjustments to mimic analog stock.";
+        }
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${id}`,
+            role: "assistant",
+            content: reply,
+          },
+        ]);
+
+        submit();
+      }}
       >
         <div className="flex items-center gap-2">
           <input
