@@ -181,7 +181,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(film|grainy|analog|retro)/.test(text)) {
     addUnique(tools, {
       name: "Noise",
-      value: "+12",
+      value: "+2",
       percent: 70,
       reason: "Adds visible grain for an analog feel.",
       control: "slider",
@@ -205,24 +205,17 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(vibrant|vivid|pop|color|colorful|saturat)/.test(text)) {
     addUnique(tools, {
       name: "Color Filter",
-      value: "Warm 20",
+      value: "Warm 30",
       percent: 65,
       reason: "Boosts color energy without clipping highlights.",
       control: "slider",
     });
     addUnique(tools, {
       name: "Brightness",
-      value: "+12",
+      value: "+7",
       percent: 55,
       reason: "Lifts midtones for a cleaner, brighter feel.",
       control: "slider",
-    });
-    addUnique(tools, {
-      name: "Sharpen",
-      value: "Off",
-      percent: 100,
-      reason: "Adds clarity so details feel crisper.",
-      control: "checkbox",
     });
   }
 
@@ -233,16 +226,6 @@ export function buildPlan(prompt: string): PromptPlan | null {
       percent: 70,
       reason: "Raises overall exposure for readability.",
       control: "slider",
-    });
-  }
-
-  if (/(soft|dreamy|haze)/.test(text)) {
-    addUnique(tools, {
-      name: "Blur",
-      value: "Off",
-      percent: 100,
-      reason: "Softens harsh edges for a dreamy look.",
-      control: "checkbox",
     });
   }
 
