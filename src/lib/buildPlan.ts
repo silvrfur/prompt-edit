@@ -41,14 +41,14 @@ export function buildPlan(prompt: string): PromptPlan | null {
     
     addUnique(tools, {
       name: "Sepia",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Applies a soft sepia wash for a classic editorial look.",
       control: "checkbox",
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Adds subtle detail without harshness, like fashion photography.",
       control: "checkbox",
@@ -72,7 +72,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Brings out edge detail like a graded film still.",
       control: "checkbox",
@@ -103,7 +103,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Blur",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Softens edges slightly for a dreamy look.",
       control: "checkbox",
@@ -127,7 +127,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Keeps details crisp in the shadows.",
       control: "checkbox",
@@ -137,29 +137,46 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(blur|out of focus|misty)/.test(text)) {
   addUnique(tools, {
     name: "Blur",
-    value: "On",
+    value: "Off",
     percent: 100,
     reason: "Softens edges for a hazy, dreamy feel.",
     control: "checkbox",
   });
 }
 
-  if (/(dreamy|soft|hazy|ethereal)/.test(text)) {
-    addUnique(tools, {
-      name: "Blur",
-      value: "On",
-      percent: 100,
-      reason: "Softens edges for a dreamy, hazy feel.",
-      control: "checkbox",
-    });
-    addUnique(tools, {
-      name: "Brightness",
-      value: "+6",
-      percent: 40,
-      reason: "Gently lifts exposure to keep it light.",
-      control: "slider",
-    });
-  }
+  if (/(dreamy|soft|hazy|ethereal|floaty|glow)/.test(text)) {
+  addUnique(tools, {
+    name: "Blur",
+    value: "2",
+    percent: 50,
+    reason: "Softens edges to create a gentle, hazy atmosphere.",
+    control: "slider",
+  });
+
+  addUnique(tools, {
+    name: "Brightness",
+    value: "+7",
+    percent: 55,
+    reason: "Lifts exposure so the softness feels airy instead of dull.",
+    control: "slider",
+  });
+
+  addUnique(tools, {
+    name: "Color Filter",
+    value: "Warm 10",
+    percent: 45,
+    reason: "Adds a gentle warm tint that enhances the ethereal mood.",
+    control: "slider",
+  });
+
+  addUnique(tools, {
+    name: "Noise",
+    value: "+1",
+    percent: 20,
+    reason: "Adds a tiny bit of grain to keep the softness from feeling flat.",
+    control: "slider",
+  });
+}
 
   if (/(film|grainy|analog|retro)/.test(text)) {
     addUnique(tools, {
@@ -202,7 +219,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Adds clarity so details feel crisper.",
       control: "checkbox",
@@ -222,7 +239,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(soft|dreamy|haze)/.test(text)) {
     addUnique(tools, {
       name: "Blur",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Softens harsh edges for a dreamy look.",
       control: "checkbox",
@@ -232,7 +249,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(sharp|clarity|detail)/.test(text)) {
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Improves micro-contrast on edges.",
       control: "checkbox",
@@ -252,7 +269,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(black and white|bw|monochrome|grayscale)/.test(text)) {
     addUnique(tools, {
       name: "Grayscale",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Removes color for a true monochrome look.",
       control: "checkbox",
@@ -262,7 +279,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(vintage|retro|sepia)/.test(text)) {
     addUnique(tools, {
       name: "Sepia",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Adds warm vintage tones.",
       control: "checkbox",
@@ -282,7 +299,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(invert|negative)/.test(text)) {
     addUnique(tools, {
       name: "Invert",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Flips tones for a negative-style look.",
       control: "checkbox",
@@ -299,7 +316,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Sharpen",
-      value: "On",
+      value: "Off",
       percent: 100,
       reason: "Adds subtle detail without harshness.",
       control: "checkbox",
