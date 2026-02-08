@@ -79,7 +79,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
     });
     addUnique(tools, {
       name: "Noise",
-      value: "+6",
+      value: "+1",
       percent: 40,
       reason: "Adds subtle grain for a film-like texture.",
       control: "slider",
@@ -89,7 +89,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(pinterest|aesthetic|pinteresty|soft vibe|cozy)/.test(text)) {
     addUnique(tools, {
       name: "Brightness",
-      value: "+12",
+      value: "+6",
       percent: 65,
       reason: "Brightens the scene for a soft, airy feel.",
       control: "slider",
@@ -146,10 +146,10 @@ export function buildPlan(prompt: string): PromptPlan | null {
 
   if (/(dreamy|soft|hazy|ethereal|floaty|glow)/.test(text)) {
   addUnique(tools, {
-    name: "Blur",
-    value: "2",
-    percent: 50,
-    reason: "Softens edges to create a gentle, hazy atmosphere.",
+    name: "Fade",
+    value: "+12",
+    percent: 60,
+    reason: "Lowers contrast for a washed, dreamy glow.",
     control: "slider",
   });
 
@@ -259,7 +259,7 @@ export function buildPlan(prompt: string): PromptPlan | null {
   if (/(grain|noise|film)/.test(text)) {
     addUnique(tools, {
       name: "Noise",
-      value: "+10",
+      value: "+3",
       percent: 55,
       reason: "Adds controlled texture for film-like grain.",
       control: "slider",
